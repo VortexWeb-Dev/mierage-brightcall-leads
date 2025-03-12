@@ -14,24 +14,7 @@ class BitrixController
         }
 
         $result = CRest::call('crm.lead.add', [
-            'fields' => [
-                'TITLE' => $leadData['TITLE'],
-                'NAME' => $leadData['NAME'],
-                'LAST_NAME' => $leadData['LAST_NAME'] ?? '',
-                'PHONE' => [
-                    [
-                        'VALUE' => $leadData['PHONE'],
-                        'VALUE_TYPE' => 'WORK'
-                    ]
-                ],
-                'EMAIL' => [
-                    [
-                        'VALUE' => $leadData['EMAIL'] ?? '',
-                        'VALUE_TYPE' => 'WORK'
-                    ]
-                ],
-                'COMMENTS' => $leadData['COMMENTS'] ?? ''
-            ],
+            'fields' => $leadData,
             'params' => ["REGISTER_SONET_EVENT" => "Y"]
         ]);
 
