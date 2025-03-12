@@ -1,0 +1,160 @@
+[2025-03-12 23:36:33] Type: call_started, Data: {
+    "callId": "1740689621.12967",
+    "type": "OUTGOING",
+    "clientPhone": "17746067286",
+    "lineNumber": "foo",
+    "timestampMs": 1740689621000,
+    "userId": 171251,
+    "treeId": 423545,
+    "shortNum": 211,
+    "shortNumber": "211",
+    "agentId": 822879,
+    "agentName": "Ahmed Gamal Abdelgalil Shaashae",
+    "agentEmail": "a.shaashae@mierage.com",
+    "projectContactFields": [
+        {
+            "name": "Phone Number",
+            "value": "17746067286"
+        }
+    ],
+    "additionalParams": {
+        "powerDialerParams": [
+            {
+                "title": "Phone Number",
+                "value": "17746067286",
+                "isWebsite": false
+            }
+        ],
+        "connectAiAgentToCall": false,
+        "additionalParams": []
+    },
+    "eventType": "callStarted"
+}
+[2025-03-12 23:44:20] Type: call_started, Data: {
+    "callId": "1740689621.12967",
+    "type": "OUTGOING",
+    "clientPhone": "17746067286",
+    "lineNumber": "foo",
+    "timestampMs": 1740689621000,
+    "userId": 171251,
+    "treeId": 423545,
+    "shortNum": 211,
+    "shortNumber": "211",
+    "agentId": 822879,
+    "agentName": "Ahmed Gamal Abdelgalil Shaashae",
+    "agentEmail": "a.shaashae@mierage.com",
+    "projectContactFields": [
+        {
+            "name": "Phone Number",
+            "value": "17746067286"
+        }
+    ],
+    "additionalParams": {
+        "powerDialerParams": [
+            {
+                "title": "Phone Number",
+                "value": "17746067286",
+                "isWebsite": false
+            }
+        ],
+        "connectAiAgentToCall": false,
+        "additionalParams": []
+    },
+    "eventType": "callStarted"
+}
+[2025-03-12 23:47:38] Type: call_started, Data: {
+    "callId": "1740689621.12967",
+    "type": "OUTGOING",
+    "clientPhone": "17746067286",
+    "lineNumber": "foo",
+    "timestampMs": 1740689621000,
+    "userId": 171251,
+    "treeId": 423545,
+    "shortNum": 211,
+    "shortNumber": "211",
+    "agentId": 822879,
+    "agentName": "Ahmed Gamal Abdelgalil Shaashae",
+    "agentEmail": "a.shaashae@mierage.com",
+    "projectContactFields": [
+        {
+            "name": "Phone Number",
+            "value": "17746067286"
+        }
+    ],
+    "additionalParams": {
+        "powerDialerParams": [
+            {
+                "title": "Phone Number",
+                "value": "17746067286",
+                "isWebsite": false
+            }
+        ],
+        "connectAiAgentToCall": false,
+        "additionalParams": []
+    },
+    "eventType": "callStarted"
+}
+[2025-03-12 23:51:34] Type: call_started, Data: {
+    "callId": "1740689621.12967",
+    "type": "OUTGOING",
+    "clientPhone": "17746067286",
+    "lineNumber": "foo",
+    "timestampMs": 1740689621000,
+    "userId": 171251,
+    "treeId": 423545,
+    "shortNum": 211,
+    "shortNumber": "211",
+    "agentId": 822879,
+    "agentName": "Ahmed Gamal Abdelgalil Shaashae",
+    "agentEmail": "a.shaashae@mierage.com",
+    "projectContactFields": [
+        {
+            "name": "Phone Number",
+            "value": "17746067286"
+        }
+    ],
+    "additionalParams": {
+        "powerDialerParams": [
+            {
+                "title": "Phone Number",
+                "value": "17746067286",
+                "isWebsite": false
+            }
+        ],
+        "connectAiAgentToCall": false,
+        "additionalParams": []
+    },
+    "eventType": "callStarted"
+}
+[2025-03-12 23:53:03] Type: call_started, Data: {
+    "callId": "1740689621.12967",
+    "type": "OUTGOING",
+    "clientPhone": "17746067286",
+    "lineNumber": "foo",
+    "timestampMs": 1740689621000,
+    "userId": 171251,
+    "treeId": 423545,
+    "shortNum": 211,
+    "shortNumber": "211",
+    "agentId": 822879,
+    "agentName": "Ahmed Gamal Abdelgalil Shaashae",
+    "agentEmail": "a.shaashae@mierage.com",
+    "projectContactFields": [
+        {
+            "name": "Phone Number",
+            "value": "17746067286"
+        }
+    ],
+    "additionalParams": {
+        "powerDialerParams": [
+            {
+                "title": "Phone Number",
+                "value": "17746067286",
+                "isWebsite": false
+            }
+        ],
+        "connectAiAgentToCall": false,
+        "additionalParams": []
+    },
+    "eventType": "callStarted"
+}

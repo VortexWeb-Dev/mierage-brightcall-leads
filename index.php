@@ -59,6 +59,7 @@ try {
     error_log("Error processing request: " . $e->getMessage());
     sendJsonResponse(500, [
         'error' => 'Internal Server Error',
-        'message' => 'An unexpected error occurred'
+        'message' => 'An unexpected error occurred',
+        'details' => $e->getMessage()
     ]);
 }
