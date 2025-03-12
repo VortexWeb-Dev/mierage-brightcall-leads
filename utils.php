@@ -5,269 +5,66 @@ require_once __DIR__ . "/crest/crest.php";
 // Formats the comments for the call
 function formatComments(array $data): string
 {
-    if ($data['eventType'] === 'callStarted') {
-
-        return sprintf(
-            "=== Call Information ===\n" .
-                "Call ID: %s\n" .
-                "Call Type: %s\n" .
-                "Event Type: %s\n\n" .
-
-                "=== Client Details ===\n" .
-                "Client Phone: %s\n" .
-                "Line Number: %s\n\n" .
-
-                "=== Agent Details ===\n" .
-                "Brightcall User ID: %d\n" .
-                "Brightcall Agent ID: %d\n" .
-                "Agent Name: %s\n" .
-                "Agent Email: %s\n\n" .
-
-                "=== Call Timing ===\n" .
-                "Call Start Time: %s\n",
-
-            // Call Information
-            $data['callId'],
-            $data['type'],
-            $data['eventType'],
-
-            // Client Details
-            $data['clientPhone'],
-            $data['lineNumber'],
-
-            // Agent Details
-            $data['userId'],
-            $data['agentId'],
-            $data['agentName'],
-            $data['agentEmail'],
-
-            // Call Timing
-            tsToHuman($data['timestampMs'])
-        );
-    } elseif ($data['eventType'] === 'callRinging') {
-
-        return sprintf(
-            "=== Call Information ===\n" .
-                "Call ID: %s\n" .
-                "Call Type: %s\n" .
-                "Event Type: %s\n\n" .
-
-                "=== Client Details ===\n" .
-                "Client Phone: %s\n" .
-                "Line Number: %s\n\n" .
-
-                "=== Agent Details ===\n" .
-                "Brightcall User ID: %d\n" .
-                "Brightcall Agent ID: %d\n" .
-                "Agent Email: %s\n\n" .
-
-                "=== Call Timing ===\n" .
-                "Call Start Time: %s\n",
-
-            // Call Information
-            $data['callId'],
-            $data['type'],
-            $data['eventType'],
-
-            // Client Details
-            $data['clientPhone'],
-            $data['lineNumber'],
-
-            // Agent Details
-            $data['userId'],
-            $data['agentId'],
-            $data['agentEmail'],
-
-            // Call Timing
-            tsToHuman($data['timestampMs'])
-        );
-    } elseif ($data['eventType'] === 'callAnswered') {
-
-        return sprintf(
-            "=== Call Information ===\n" .
-                "Call ID: %s\n" .
-                "Call Type: %s\n" .
-                "Event Type: %s\n\n" .
-
-                "=== Client Details ===\n" .
-                "Client Phone: %s\n" .
-                "Line Number: %s\n\n" .
-
-                "=== Agent Details ===\n" .
-                "Brightcall User ID: %d\n" .
-                "Brightcall Agent ID: %d\n" .
-                "Agent Email: %s\n\n" .
-
-                "=== Call Timing ===\n" .
-                "Call Start Time: %s\n",
-
-            // Call Information
-            $data['callId'],
-            $data['type'],
-            $data['eventType'],
-
-            // Client Details
-            $data['clientPhone'],
-            $data['lineNumber'],
-
-            // Agent Details
-            $data['userId'],
-            $data['agentId'],
-            $data['agentEmail'],
-
-            // Call Timing
-            tsToHuman($data['timestampMs'])
-        );
-    } elseif ($data['eventType'] === 'callEnded' && $data['type'] === 'INCOMING') {
-
-        return sprintf(
-            "=== Call Information ===\n" .
-                "Call ID: %s\n" .
-                "Call Type: %s\n" .
-                "Event Type: %s\n\n" .
-
-                "=== Client Details ===\n" .
-                "Client Phone: %s\n" .
-                "Line Number: %s\n\n" .
-
-                "=== Agent Details ===\n" .
-                "Brightcall User ID: %d\n\n" .
-
-                "=== Call Timing ===\n" .
-                "Call Start Time: %s\n" .
-                "Call End Time: %s\n",
-
-            // Call Information
-            $data['callId'],
-            $data['type'],
-            $data['eventType'],
-
-            // Client Details
-            $data['clientPhone'],
-            $data['lineNumber'],
-
-            // Agent Details
-            $data['userId'],
-
-            // Call Timing
-            tsToHuman($data['startTimestampMs']),
-            tsToHuman($data['endTimestampMs'])
-        );
-    } elseif ($data['eventType'] === 'callEnded' && $data['type'] === 'OUTGOING') {
-        return sprintf(
-            "=== Call Information ===\n" .
-                "Call ID: %s\n" .
-                "Call Type: %s\n" .
-                "Event Type: %s\n" .
-                "Call Recording URL: %s\n\n" .
-
-                "=== Client Details ===\n" .
-                "Client Phone: %s\n" .
-                "Line Number: %s\n\n" .
-
-                "=== Agent Details ===\n" .
-                "Brightcall User ID: %d\n" .
-                "Brightcall Agent ID: %d\n" .
-                "Agent Name: %s\n" .
-                "Agent Email: %s\n\n" .
-
-                "=== Call Timing ===\n" .
-                "Call Start Time: %s\n" .
-                "Call Answer Time: %s\n" .
-                "Call Duration: %s seconds\n" .
-                "Call End Time: %s\n",
-
-            // Call Information
-            $data['callId'],
-            $data['type'],
-            $data['eventType'],
-            $data['recordName'],
-
-            // Client Details
-            $data['clientPhone'],
-            $data['lineNumber'],
-
-            // Agent Details
-            $data['userId'],
-            $data['agentId'],
-            $data['agentName'],
-            $data['agentEmail'],
-
-            // Call Timing
-            tsToHuman($data['startTimestampMs']),
-            tsToHuman($data['answerTimestampMs']),
-            getCallDuration($data['startTimestampMs'], $data['endTimestampMs']),
-            tsToHuman($data['endTimestampMs'])
-        );
-    } elseif ($data['eventType'] === 'smsEvent') {
-
-        return "
-
-                ";
-    } elseif ($data['eventType'] === 'webphoneSummary') {
-
-        return sprintf(
-            "=== Call Information ===\n" .
-                "Call ID: %s\n" .
-                "Call Type: %s\n" .
-                "Event Type: %s\n" .
-                "Call Recording URL: %s\n\n" .
-
-                "=== Client Details ===\n" .
-                "Client Phone: %s\n" .
-                "Line Number: %s\n\n" .
-
-                "=== Agent Details ===\n" .
-                "Brightcall User ID: %d\n" .
-                "Brightcall Agent ID: %d\n" .
-                "Agent Name: %s\n" .
-                "Agent Email: %s\n\n" .
-
-                "=== Call Timing ===\n" .
-                "Call Start Time: %s\n" .
-                "Call Answer Time: %s\n" .
-                "Call Duration: %s seconds\n" .
-                "Call End Time: %s\n\n" .
-
-                "=== Lead Details ===\n" .
-                "Goal: %s\n" .
-                "Goal Type: %s\n",
-
-            // Call Information
-            $data['callId'],
-            $data['type'],
-            $data['eventType'],
-            $data['recordName'],
-
-            // Client Details
-            $data['clientPhone'],
-            $data['lineNumber'],
-
-            // Agent Details
-            $data['userId'],
-            $data['agentId'],
-            $data['agentName'],
-            $data['agentEmail'],
-
-            // Call Timing
-            tsToHuman($data['startTimestampMs']),
-            tsToHuman($data['answerTimestampMs']),
-            getCallDuration($data['startTimestampMs'], $data['endTimestampMs']),
-            tsToHuman($data['endTimestampMs']),
-
-            // Lead Details
-            $data['goal'],
-            $data['goalType']
-
-        );
-    } elseif ($data['eventType'] === 'aiTranscriptionSummary') {
-
-        return "
-
-                ";
+    if (in_array($data['eventType'], ['smsEvent', 'aiTranscriptionSummary'])) {
+        return "No data available for " . ($data['eventType'] === 'smsEvent' ? 'SMS events' : 'AI transcription summary') . ".";
     }
 
-    return "";
+    $output = [];
+
+    $output[] = "=== Call Information ===";
+    $output[] = "Call ID: " . $data['callId'];
+    $output[] = "Call Type: " . $data['type'];
+    $output[] = "Event Type: " . $data['eventType'];
+
+    if (isset($data['recordName'])) {
+        $output[] = "Call Recording URL: " . $data['recordName'];
+    }
+    $output[] = "";
+
+    $output[] = "=== Client Details ===";
+    $output[] = "Client Phone: " . $data['clientPhone'];
+    $output[] = "Line Number: " . $data['lineNumber'];
+    $output[] = "";
+
+    $output[] = "=== Agent Details ===";
+    $output[] = "Brightcall User ID: " . $data['userId'];
+
+    if (isset($data['agentId'])) {
+        $output[] = "Brightcall Agent ID: " . $data['agentId'];
+    }
+
+    if (isset($data['agentName'])) {
+        $output[] = "Agent Name: " . $data['agentName'];
+    }
+
+    if (isset($data['agentEmail'])) {
+        $output[] = "Agent Email: " . $data['agentEmail'];
+    }
+    $output[] = "";
+
+    $output[] = "=== Call Timing ===";
+
+    if ($data['eventType'] === 'callEnded') {
+        $output[] = "Call Start Time: " . tsToHuman($data['startTimestampMs']);
+
+        if (isset($data['answerTimestampMs'])) {
+            $output[] = "Call Answer Time: " . tsToHuman($data['answerTimestampMs']);
+            $output[] = "Call Duration: " . getCallDuration($data['startTimestampMs'], $data['endTimestampMs']) . " seconds";
+        }
+
+        $output[] = "Call End Time: " . tsToHuman($data['endTimestampMs']);
+    } else {
+        $output[] = "Call Start Time: " . tsToHuman($data['timestampMs']);
+    }
+
+    if ($data['eventType'] === 'webphoneSummary') {
+        $output[] = "";
+        $output[] = "=== Lead Details ===";
+        $output[] = "Goal: " . $data['goal'];
+        $output[] = "Goal Type: " . $data['goalType'];
+    }
+
+    return implode("\n", $output);
 }
 
 // Gets the responsible person ID from the agent email
@@ -298,7 +95,19 @@ function tsToIso($tsMs, $tz = 'Asia/Dubai')
 function tsToHuman($tsMs, $tz = 'Asia/Dubai')
 {
     $date = (new DateTime("@" . ($tsMs / 1000)))->setTimezone(new DateTimeZone($tz));
-    return $date->format('F j, Y \a\t h:i A (T)');
+    $now = new DateTime('now', new DateTimeZone($tz));
+    $yesterday = (clone $now)->modify('-1 day')->format('Y-m-d');
+
+    $dateFormatted = $date->format('Y-m-d');
+    $timeFormatted = $date->format('h:i A');
+
+    if ($dateFormatted === $now->format('Y-m-d')) {
+        return "Today at $timeFormatted";
+    } elseif ($dateFormatted === $yesterday) {
+        return "Yesterday at $timeFormatted";
+    } else {
+        return $date->format('F j, Y \a\t h:i A');
+    }
 }
 
 // Converts time in HH:MM:SS format to seconds
