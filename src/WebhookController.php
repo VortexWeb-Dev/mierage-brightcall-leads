@@ -111,6 +111,31 @@ class WebhookController
     public function handleCallRinging(array $data): void
     {
         $this->logger->logWebhook('call_ringing', $data);
+
+        $leadData = [
+            'TITLE' => 'Brightcall Lead - ' . $data['eventType'] . ' - ' . $data['type'],
+            'NAME' => 'Unknown Caller from Brightcall (' . $data['clientPhone'] . ')',
+            'PHONE' => [
+                [
+                    'VALUE' => $data['clientPhone'],
+                    'VALUE_TYPE' => 'WORK'
+                ]
+            ],
+            'COMMENTS' => formatComments($data),
+            'SOURCE_ID' => CONFIG['BRIGHTCALL_SOURCE_ID'],
+            'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
+            'UF_CRM_1726453884158' => tsToIso($data['timestampMs']),
+            'ASSIGNED_BY_ID' => getResponsiblePersonId($data['agentEmail']) ?? CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+        ];
+
+        $leadId = $this->bitrix->addLead($leadData);
+
+        if (!$leadId) {
+            $this->sendResponse(500, [
+                'error' => 'Failed to create lead in Bitrix'
+            ]);
+        }
+
         $this->sendResponse(200, [
             'message' => 'Call ringing data processed successfully'
         ]);
