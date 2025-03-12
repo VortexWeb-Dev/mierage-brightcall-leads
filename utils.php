@@ -83,9 +83,41 @@ function formatComments(array $data): string
         );
     } elseif ($data['eventType'] === 'callAnswered') {
 
-        return "
+        return sprintf(
+            "=== Call Information ===\n" .
+                "Call ID: %s\n" .
+                "Call Type: %s\n" .
+                "Event Type: %s\n\n" .
 
-                ";
+                "=== Client Details ===\n" .
+                "Client Phone: %s\n" .
+                "Line Number: %s\n\n" .
+
+                "=== Agent Details ===\n" .
+                "Brightcall User ID: %d\n" .
+                "Brightcall Agent ID: %d\n" .
+                "Agent Email: %s\n\n" .
+
+                "=== Call Timing ===\n" .
+                "Call Start Time: %s\n",
+
+            // Call Information
+            $data['callId'],
+            $data['type'],
+            $data['eventType'],
+
+            // Client Details
+            $data['clientPhone'],
+            $data['lineNumber'],
+
+            // Agent Details
+            $data['userId'],
+            $data['agentId'],
+            $data['agentEmail'],
+
+            // Call Timing
+            tsToHuman($data['timestampMs'])
+        );
     } elseif ($data['eventType'] === 'callEnded' && $data['type'] === 'INCOMING') {
 
         return sprintf(
