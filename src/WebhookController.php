@@ -25,6 +25,7 @@ class WebhookController
         $this->bitrix = new BitrixController();
     }
 
+    // Handles incoming webhooks
     public function handleRequest(string $route): void
     {
         try {
@@ -60,6 +61,7 @@ class WebhookController
         }
     }
 
+    // Parses incoming JSON data
     private function parseRequestData(): ?array
     {
         $rawData = file_get_contents('php://input');
@@ -67,6 +69,7 @@ class WebhookController
         return $data;
     }
 
+    // Sends response back to the webhook
     private function sendResponse(int $statusCode, array $data): void
     {
         header("Content-Type: application/json");
@@ -75,6 +78,7 @@ class WebhookController
         exit;
     }
 
+    // Handles callStarted webhook event
     public function handleCallStarted(array $data): void
     {
         $this->logger->logWebhook('call_started', $data);
@@ -108,6 +112,7 @@ class WebhookController
         ]);
     }
 
+    // Handles callRinging webhook event
     public function handleCallRinging(array $data): void
     {
         $this->logger->logWebhook('call_ringing', $data);
@@ -141,6 +146,7 @@ class WebhookController
         ]);
     }
 
+    // Handles callAnswered webhook event
     public function handleCallAnswered(array $data): void
     {
         $this->logger->logWebhook('call_answered', $data);
@@ -174,6 +180,7 @@ class WebhookController
         ]);
     }
 
+    // Handles callEnded webhook event
     public function handleCallEnded(array $data): void
     {
         $this->logger->logWebhook('call_ended', $data);
@@ -218,6 +225,7 @@ class WebhookController
         ]);
     }
 
+    // Handles smsEvent webhook event
     public function handleSmsEvent(array $data): void
     {
         $this->logger->logWebhook('sms_event', $data);
@@ -226,6 +234,7 @@ class WebhookController
         ]);
     }
 
+    // Handles webphoneSummary webhook event
     public function handleWebphoneSummary(array $data): void
     {
         $this->logger->logWebhook('webphone_summary', $data);
@@ -270,6 +279,7 @@ class WebhookController
         ]);
     }
 
+    // Handles aiTranscriptionSummary webhook event
     public function handleAiTranscriptionSummary(array $data): void
     {
         $this->logger->logWebhook('ai_transcription', $data);
@@ -278,6 +288,7 @@ class WebhookController
         ]);
     }
 
+    // Registers a call in Bitrix
     private function registerCall($leadData, $data, $leadId)
     {
         $registerCall = registerCall([
@@ -297,6 +308,7 @@ class WebhookController
         return $registerCall;
     }
 
+    // Finishes a call and attaches the call record
     private function finishCallAndAttachRecord($callId, $leadData, $data, $callRecordContent)
     {
         $finishCall = finishCall([
