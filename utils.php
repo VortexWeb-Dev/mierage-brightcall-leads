@@ -211,3 +211,32 @@ function tsToHuman($tsMs, $tz = 'Asia/Dubai')
     $date = (new DateTime("@" . ($tsMs / 1000)))->setTimezone(new DateTimeZone($tz));
     return $date->format('F j, Y \a\t h:i A (T)');
 }
+
+function timeToSec($time)
+{
+    $time = explode(':', $time);
+    return $time[0] * 3600 + $time[1] * 60 + $time[2];
+}
+
+function getCallDuration($startTimestampMs, $endTimestampMs)
+{
+    return ($endTimestampMs - $startTimestampMs) / 1000;
+}
+
+function registerCall($fields)
+{
+    $res = CRest::call('telephony.externalcall.register', $fields);
+    return $res['result'];
+}
+
+function finishCall($fields)
+{
+    $res = CRest::call('telephony.externalcall.finish', $fields);
+    return $res['result'];
+}
+
+function attachRecord($fields)
+{
+    $res = CRest::call('telephony.externalcall.attachRecord', $fields);
+    return $res['result'];
+}

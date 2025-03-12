@@ -177,7 +177,16 @@ class WebhookController
             ]);
         }
 
-        // If $data['recordName'] register the call recording
+        if ($data['type'] === 'OUTGOING' && $data['recordName']) {
+            $callRecordContent = @file_get_contents($data['recordName']);
+
+            $registerCall = $this->registerCall($leadData, $data, $leadId);
+            $callId = $registerCall['CALL_ID'] ?? null;
+
+            if ($callId) {
+                $this->finishCallAndAttachRecord($callId, $leadData, $data, $callRecordContent);
+            }
+        }
 
         $this->sendResponse(200, [
             'message' => 'Call ended data processed successfully and lead created with ID: ' . $leadId,
@@ -205,6 +214,41 @@ class WebhookController
         $this->logger->logWebhook('ai_transcription', $data);
         $this->sendResponse(200, [
             'message' => 'AI transcription summary data processed successfully'
+        ]);
+    }
+
+    private function registerCall($leadData, $data, $leadId)
+    {
+        $registerCall = registerCall([
+            'USER_PHONE_INNER' => $data['lineNumber'],
+            'USER_ID' => $leadData['ASSIGNED_BY_ID'],
+            'PHONE_NUMBER' => $data['clientPhone'],
+            'CALL_START_DATE' => tsToIso($data['startTimestampMs']),
+            'CRM_CREATE' => false,
+            'CRM_SOURCE' => $leadData['SOURCE_ID'],
+            'CRM_ENTITY_TYPE' => 'LEAD',
+            'CRM_ENTITY_ID' => $leadId,
+            'SHOW' => false,
+            'TYPE' => $data['type'] === 'INCOMING' ? 2 : 1,
+            'LINE_NUMBER' => 'Brightcall ' . $data['receiver_number'],
+        ]);
+
+        return $registerCall;
+    }
+
+    private function finishCallAndAttachRecord($callId, $leadData, $data, $callRecordContent)
+    {
+        $finishCall = finishCall([
+            'CALL_ID' => $callId,
+            'USER_ID' => $leadData['ASSIGNED_BY_ID'],
+            'DURATION' => getCallDuration($data['startTimestampMs'], $data['endTimestampMs']),
+            'STATUS_CODE' => 200,
+        ]);
+
+        $attachRecord = attachRecord([
+            'CALL_ID' => $callId,
+            'FILENAME' => $data['callId'] . '|' . uniqid('call') . '.mp3',
+            'FILE_CONTENT' => base64_encode($callRecordContent),
         ]);
     }
 }
