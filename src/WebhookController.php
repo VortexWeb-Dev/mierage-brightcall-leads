@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . "/../crest/crest.php";
+require_once __DIR__ . "/../utils.php";
+
+define('CONFIG', require_once __DIR__ . '/../config.php');
 
 class WebhookController
 {
@@ -14,12 +17,15 @@ class WebhookController
     ];
 
     private LoggerController $logger;
+    private BitrixController $bitrix;
 
     public function __construct()
     {
         $this->logger = new LoggerController();
+        $this->bitrix = new BitrixController();
     }
 
+    // Handles incoming webhooks
     public function handleRequest(string $route): void
     {
         try {
@@ -55,6 +61,7 @@ class WebhookController
         }
     }
 
+    // Parses incoming JSON data
     private function parseRequestData(): ?array
     {
         $rawData = file_get_contents('php://input');
@@ -62,6 +69,7 @@ class WebhookController
         return $data;
     }
 
+    // Sends response back to the webhook
     private function sendResponse(int $statusCode, array $data): void
     {
         header("Content-Type: application/json");
@@ -70,38 +78,154 @@ class WebhookController
         exit;
     }
 
+    // Handles callStarted webhook event
     public function handleCallStarted(array $data): void
     {
         $this->logger->logWebhook('call_started', $data);
+
+        $leadData = [
+            'TITLE' => 'Brightcall Lead - ' . $data['eventType'] . ' - ' . $data['type'],
+            'NAME' => 'Unknown Caller from Brightcall (' . $data['clientPhone'] . ')',
+            'PHONE' => [
+                [
+                    'VALUE' => $data['clientPhone'],
+                    'VALUE_TYPE' => 'WORK'
+                ]
+            ],
+            'COMMENTS' => formatComments($data),
+            'SOURCE_ID' => CONFIG['BRIGHTCALL_SOURCE_ID'],
+            'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
+            'UF_CRM_1726453884158' => tsToIso($data['timestampMs']),
+            'ASSIGNED_BY_ID' => getResponsiblePersonId($data['agentEmail']) ?? CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+        ];
+
+        $leadId = $this->bitrix->addLead($leadData);
+
+        if (!$leadId) {
+            $this->sendResponse(500, [
+                'error' => 'Failed to create lead in Bitrix'
+            ]);
+        }
+
         $this->sendResponse(200, [
-            'message' => 'Call started data processed successfully'
+            'message' => 'Call started data processed successfully and lead created with ID: ' . $leadId,
         ]);
     }
 
+    // Handles callRinging webhook event
     public function handleCallRinging(array $data): void
     {
         $this->logger->logWebhook('call_ringing', $data);
+
+        $leadData = [
+            'TITLE' => 'Brightcall Lead - ' . $data['eventType'] . ' - ' . $data['type'],
+            'NAME' => 'Unknown Caller from Brightcall (' . $data['clientPhone'] . ')',
+            'PHONE' => [
+                [
+                    'VALUE' => $data['clientPhone'],
+                    'VALUE_TYPE' => 'WORK'
+                ]
+            ],
+            'COMMENTS' => formatComments($data),
+            'SOURCE_ID' => CONFIG['BRIGHTCALL_SOURCE_ID'],
+            'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
+            'UF_CRM_1726453884158' => tsToIso($data['timestampMs']),
+            'ASSIGNED_BY_ID' => getResponsiblePersonId($data['agentEmail']) ?? CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+        ];
+
+        $leadId = $this->bitrix->addLead($leadData);
+
+        if (!$leadId) {
+            $this->sendResponse(500, [
+                'error' => 'Failed to create lead in Bitrix'
+            ]);
+        }
+
         $this->sendResponse(200, [
-            'message' => 'Call ringing data processed successfully'
+            'message' => 'Call ringing data processed successfully and lead created with ID: ' . $leadId,
         ]);
     }
 
+    // Handles callAnswered webhook event
     public function handleCallAnswered(array $data): void
     {
         $this->logger->logWebhook('call_answered', $data);
+
+        $leadData = [
+            'TITLE' => 'Brightcall Lead - ' . $data['eventType'] . ' - ' . $data['type'],
+            'NAME' => 'Unknown Caller from Brightcall (' . $data['clientPhone'] . ')',
+            'PHONE' => [
+                [
+                    'VALUE' => $data['clientPhone'],
+                    'VALUE_TYPE' => 'WORK'
+                ]
+            ],
+            'COMMENTS' => formatComments($data),
+            'SOURCE_ID' => CONFIG['BRIGHTCALL_SOURCE_ID'],
+            'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
+            'UF_CRM_1726453884158' => tsToIso($data['timestampMs']),
+            'ASSIGNED_BY_ID' => getResponsiblePersonId($data['agentEmail']) ?? CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+        ];
+
+        $leadId = $this->bitrix->addLead($leadData);
+
+        if (!$leadId) {
+            $this->sendResponse(500, [
+                'error' => 'Failed to create lead in Bitrix'
+            ]);
+        }
+
         $this->sendResponse(200, [
-            'message' => 'Call answered data processed successfully'
+            'message' => 'Call answered data processed successfully and lead created with ID: ' . $leadId,
         ]);
     }
 
+    // Handles callEnded webhook event
     public function handleCallEnded(array $data): void
     {
         $this->logger->logWebhook('call_ended', $data);
+
+        $leadData = [
+            'TITLE' => 'Brightcall Lead - ' . $data['eventType'] . ' - ' . $data['type'],
+            'NAME' => 'Unknown Caller from Brightcall (' . $data['clientPhone'] . ')',
+            'PHONE' => [
+                [
+                    'VALUE' => $data['clientPhone'],
+                    'VALUE_TYPE' => 'WORK'
+                ]
+            ],
+            'COMMENTS' => formatComments($data),
+            'SOURCE_ID' => CONFIG['BRIGHTCALL_SOURCE_ID'],
+            'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
+            'UF_CRM_1726453884158' => tsToIso($data['startTimestampMs']),
+            'ASSIGNED_BY_ID' => $data['agentEmail'] ? getResponsiblePersonId($data['agentEmail']) : CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+        ];
+
+        $leadId = $this->bitrix->addLead($leadData);
+
+        if (!$leadId) {
+            $this->sendResponse(500, [
+                'error' => 'Failed to create lead in Bitrix'
+            ]);
+        }
+
+        if ($data['type'] === 'OUTGOING' && $data['recordName']) {
+            $callRecordContent = @file_get_contents($data['recordName']);
+
+            $registerCall = $this->registerCall($leadData, $data, $leadId);
+            $callId = $registerCall['CALL_ID'] ?? null;
+
+            if ($callId) {
+                $this->finishCallAndAttachRecord($callId, $leadData, $data, $callRecordContent);
+            }
+        }
+
         $this->sendResponse(200, [
-            'message' => 'Call ended data processed successfully'
+            'message' => 'Call ended data processed successfully and lead created with ID: ' . $leadId,
         ]);
     }
 
+    // Handles smsEvent webhook event
     public function handleSmsEvent(array $data): void
     {
         $this->logger->logWebhook('sms_event', $data);
@@ -110,19 +234,94 @@ class WebhookController
         ]);
     }
 
+    // Handles webphoneSummary webhook event
     public function handleWebphoneSummary(array $data): void
     {
         $this->logger->logWebhook('webphone_summary', $data);
+        
+        $leadData = [
+            'TITLE' => 'Brightcall Lead - ' . $data['eventType'] . ' - ' . $data['type'],
+            'NAME' => 'Unknown Caller from Brightcall (' . $data['clientPhone'] . ')',
+            'PHONE' => [
+                [
+                    'VALUE' => $data['clientPhone'],
+                    'VALUE_TYPE' => 'WORK'
+                ]
+            ],
+            'COMMENTS' => formatComments($data),
+            'SOURCE_ID' => CONFIG['BRIGHTCALL_SOURCE_ID'],
+            'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
+            'UF_CRM_1726453884158' => tsToIso($data['startTimestampMs']),
+            'ASSIGNED_BY_ID' => $data['agentEmail'] ? getResponsiblePersonId($data['agentEmail']) : CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+        ];
+
+        $leadId = $this->bitrix->addLead($leadData);
+
+        if (!$leadId) {
+            $this->sendResponse(500, [
+                'error' => 'Failed to create lead in Bitrix'
+            ]);
+        }
+
+        if ($data['type'] === 'OUTGOING' && $data['recordName']) {
+            $callRecordContent = @file_get_contents($data['recordName']);
+
+            $registerCall = $this->registerCall($leadData, $data, $leadId);
+            $callId = $registerCall['CALL_ID'] ?? null;
+
+            if ($callId) {
+                $this->finishCallAndAttachRecord($callId, $leadData, $data, $callRecordContent);
+            }
+        }
+
         $this->sendResponse(200, [
-            'message' => 'Webphone summary data processed successfully'
+            'message' => 'Webphone summary data processed successfully and lead created with ID: ' . $leadId,
         ]);
     }
 
+    // Handles aiTranscriptionSummary webhook event
     public function handleAiTranscriptionSummary(array $data): void
     {
         $this->logger->logWebhook('ai_transcription', $data);
         $this->sendResponse(200, [
             'message' => 'AI transcription summary data processed successfully'
+        ]);
+    }
+
+    // Registers a call in Bitrix
+    private function registerCall($leadData, $data, $leadId)
+    {
+        $registerCall = registerCall([
+            'USER_PHONE_INNER' => $data['lineNumber'],
+            'USER_ID' => $leadData['ASSIGNED_BY_ID'],
+            'PHONE_NUMBER' => $data['clientPhone'],
+            'CALL_START_DATE' => tsToIso($data['startTimestampMs']),
+            'CRM_CREATE' => false,
+            'CRM_SOURCE' => $leadData['SOURCE_ID'],
+            'CRM_ENTITY_TYPE' => 'LEAD',
+            'CRM_ENTITY_ID' => $leadId,
+            'SHOW' => false,
+            'TYPE' => $data['type'] === 'INCOMING' ? 2 : 1,
+            'LINE_NUMBER' => 'Brightcall ' . $data['receiver_number'],
+        ]);
+
+        return $registerCall;
+    }
+
+    // Finishes a call and attaches the call record
+    private function finishCallAndAttachRecord($callId, $leadData, $data, $callRecordContent)
+    {
+        $finishCall = finishCall([
+            'CALL_ID' => $callId,
+            'USER_ID' => $leadData['ASSIGNED_BY_ID'],
+            'DURATION' => getCallDuration($data['startTimestampMs'], $data['endTimestampMs']),
+            'STATUS_CODE' => 200,
+        ]);
+
+        $attachRecord = attachRecord([
+            'CALL_ID' => $callId,
+            'FILENAME' => $data['callId'] . '|' . uniqid('call') . '.mp3',
+            'FILE_CONTENT' => base64_encode($callRecordContent),
         ]);
     }
 }
