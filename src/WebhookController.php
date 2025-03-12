@@ -137,7 +137,7 @@ class WebhookController
         }
 
         $this->sendResponse(200, [
-            'message' => 'Call ringing data processed successfully'
+            'message' => 'Call ringing data processed successfully and lead created with ID: ' . $leadId,
         ]);
     }
 
