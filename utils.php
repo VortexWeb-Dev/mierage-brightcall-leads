@@ -158,7 +158,8 @@ function formatComments(array $data): string
             "=== Call Information ===\n" .
                 "Call ID: %s\n" .
                 "Call Type: %s\n" .
-                "Event Type: %s\n\n" .
+                "Event Type: %s\n" .
+                "Call Recording URL: %s\n\n" .
 
                 "=== Client Details ===\n" .
                 "Client Phone: %s\n" .
@@ -173,12 +174,14 @@ function formatComments(array $data): string
                 "=== Call Timing ===\n" .
                 "Call Start Time: %s\n" .
                 "Call Answer Time: %s\n" .
+                "Call Duration: %s seconds\n" .
                 "Call End Time: %s\n",
 
             // Call Information
             $data['callId'],
             $data['type'],
             $data['eventType'],
+            $data['recordName'],
 
             // Client Details
             $data['clientPhone'],
@@ -193,8 +196,8 @@ function formatComments(array $data): string
             // Call Timing
             tsToHuman($data['startTimestampMs']),
             tsToHuman($data['answerTimestampMs']),
-            tsToHuman($data['endTimestampMs']),
-
+            getCallDuration($data['startTimestampMs'], $data['endTimestampMs']),
+            tsToHuman($data['endTimestampMs'])
         );
     } elseif ($data['eventType'] === 'smsEvent') {
 
@@ -203,9 +206,60 @@ function formatComments(array $data): string
                 ";
     } elseif ($data['eventType'] === 'webphoneSummary') {
 
-        return "
+        return sprintf(
+            "=== Call Information ===\n" .
+                "Call ID: %s\n" .
+                "Call Type: %s\n" .
+                "Event Type: %s\n" .
+                "Call Recording URL: %s\n\n" .
 
-                ";
+                "=== Client Details ===\n" .
+                "Client Phone: %s\n" .
+                "Line Number: %s\n\n" .
+
+                "=== Agent Details ===\n" .
+                "Brightcall User ID: %d\n" .
+                "Brightcall Agent ID: %d\n" .
+                "Agent Name: %s\n" .
+                "Agent Email: %s\n\n" .
+
+                "=== Call Timing ===\n" .
+                "Call Start Time: %s\n" .
+                "Call Answer Time: %s\n" .
+                "Call Duration: %s seconds\n" .
+                "Call End Time: %s\n\n" .
+
+                "=== Lead Details ===\n" .
+                "Goal: %s\n" .
+                "Goal Type: %s\n",
+
+            // Call Information
+            $data['callId'],
+            $data['type'],
+            $data['eventType'],
+            $data['recordName'],
+
+            // Client Details
+            $data['clientPhone'],
+            $data['lineNumber'],
+
+            // Agent Details
+            $data['userId'],
+            $data['agentId'],
+            $data['agentName'],
+            $data['agentEmail'],
+
+            // Call Timing
+            tsToHuman($data['startTimestampMs']),
+            tsToHuman($data['answerTimestampMs']),
+            getCallDuration($data['startTimestampMs'], $data['endTimestampMs']),
+            tsToHuman($data['endTimestampMs']),
+
+            // Lead Details
+            $data['goal'],
+            $data['goalType']
+
+        );
     } elseif ($data['eventType'] === 'aiTranscriptionSummary') {
 
         return "
