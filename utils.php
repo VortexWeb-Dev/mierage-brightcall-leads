@@ -85,11 +85,84 @@ function formatComments(array $data): string
         return "
 
                 ";
-    } elseif ($data['eventType'] === 'callEnded') {
+    } elseif ($data['eventType'] === 'callEnded' && $data['type'] === 'INCOMING') {
 
-        return "
+        return sprintf(
+            "=== Call Information ===\n" .
+                "Call ID: %s\n" .
+                "Call Type: %s\n" .
+                "Event Type: %s\n\n" .
 
-                ";
+                "=== Client Details ===\n" .
+                "Client Phone: %s\n" .
+                "Line Number: %s\n\n" .
+
+                "=== Agent Details ===\n" .
+                "Brightcall User ID: %d\n\n" .
+
+                "=== Call Timing ===\n" .
+                "Call Start Time: %s\n" .
+                "Call End Time: %s\n",
+
+            // Call Information
+            $data['callId'],
+            $data['type'],
+            $data['eventType'],
+
+            // Client Details
+            $data['clientPhone'],
+            $data['lineNumber'],
+
+            // Agent Details
+            $data['userId'],
+
+            // Call Timing
+            tsToHuman($data['startTimestampMs']),
+            tsToHuman($data['endTimestampMs'])
+        );
+    } elseif ($data['eventType'] === 'callEnded' && $data['type'] === 'OUTGOING') {
+        return sprintf(
+            "=== Call Information ===\n" .
+                "Call ID: %s\n" .
+                "Call Type: %s\n" .
+                "Event Type: %s\n\n" .
+
+                "=== Client Details ===\n" .
+                "Client Phone: %s\n" .
+                "Line Number: %s\n\n" .
+
+                "=== Agent Details ===\n" .
+                "Brightcall User ID: %d\n" .
+                "Brightcall Agent ID: %d\n" .
+                "Agent Name: %s\n" .
+                "Agent Email: %s\n\n" .
+
+                "=== Call Timing ===\n" .
+                "Call Start Time: %s\n" .
+                "Call Answer Time: %s\n" .
+                "Call End Time: %s\n",
+
+            // Call Information
+            $data['callId'],
+            $data['type'],
+            $data['eventType'],
+
+            // Client Details
+            $data['clientPhone'],
+            $data['lineNumber'],
+
+            // Agent Details
+            $data['userId'],
+            $data['agentId'],
+            $data['agentName'],
+            $data['agentEmail'],
+
+            // Call Timing
+            tsToHuman($data['startTimestampMs']),
+            tsToHuman($data['answerTimestampMs']),
+            tsToHuman($data['endTimestampMs']),
+
+        );
     } elseif ($data['eventType'] === 'smsEvent') {
 
         return "
