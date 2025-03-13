@@ -209,7 +209,7 @@ class WebhookController
             ]);
         }
 
-        if ($data['type'] === 'OUTGOING' && $data['recordName']) {
+        if ($data['recordName']) {
             $callRecordContent = @file_get_contents($data['recordName']);
 
             $registerCall = $this->registerCall($leadData, $data, $leadId);
