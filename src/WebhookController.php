@@ -209,7 +209,7 @@ class WebhookController
             ]);
         }
 
-        if ($data['type'] === 'OUTGOING' && $data['recordName']) {
+        if ($data['recordName']) {
             $callRecordContent = @file_get_contents($data['recordName']);
 
             $registerCall = $this->registerCall($leadData, $data, $leadId);
@@ -320,7 +320,7 @@ class WebhookController
 
         $attachRecord = attachRecord([
             'CALL_ID' => $callId,
-            'FILENAME' => $data['callId'] . '|' . uniqid('call') . '.mp3',
+            'FILENAME' => $data['callId'] . '|' . uniqid($data['endTimestampMs']) . '.mp3',
             'FILE_CONTENT' => base64_encode($callRecordContent),
         ]);
     }
