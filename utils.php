@@ -5,6 +5,10 @@ require_once __DIR__ . "/crest/crest.php";
 // Formats the comments for the call
 function formatComments(array $data): string
 {
+    if ($data['type'] && $data['type'] == 'lead_created') {
+        return formatLeadComments($data);
+    }
+
     if (in_array($data['eventType'], ['smsEvent', 'aiTranscriptionSummary'])) {
         return "No data available for " . ($data['eventType'] === 'smsEvent' ? 'SMS events' : 'AI transcription summary') . ".";
     }
@@ -67,6 +71,29 @@ function formatComments(array $data): string
     return implode("\n", $output);
 }
 
+function formatLeadComments(array $data): string
+{
+    $output = [];
+
+    $output[] = "=== Lead Information ===";
+    $output[] = "Call ID: " . $data['call_id'];
+    $output[] = "Event Type: " . $data['type'];
+    $output[] = "Lead ID: " . $data['lead']['lead_id'];
+    $output[] = "Lead Source: " . $data['lead']['custom_params']['api_source'];
+    $output[] = "";
+
+    $output[] = "=== Client Details ===";
+    $output[] = "Client Name: " . $data['lead']['custom_params']['lc_param_name'];
+    $output[] = "Client Phone: " . $data['clientPhone'];
+    $output[] = "Client Email: " . strtolower($data['lead']['custom_params']['lc_param_email']);
+    $output[] = "";
+
+    $output[] = "=== Lead Timing ===";
+    $output[] = "Created Time: " . isoToHuman($data['lead']['time_created_iso_string']);
+
+    return implode("\n", $output);
+}
+
 // Gets the responsible person ID from the agent email
 function getResponsiblePersonId(string $agentEmail): ?int
 {
@@ -83,6 +110,13 @@ function getResponsiblePersonId(string $agentEmail): ?int
     }
 
     return $responsiblePersonId;
+}
+
+// Converts ISO 8601 string to human readable format
+function isoToHuman($isoString)
+{
+    $ts = (new DateTime($isoString))->getTimestamp();
+    return tsToHuman($ts * 1000);
 }
 
 // Converts timestamp in milliseconds to ISO 8601 format

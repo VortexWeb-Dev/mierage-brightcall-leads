@@ -239,7 +239,7 @@ class WebhookController
     public function handleWebphoneSummary(array $data): void
     {
         $this->logger->logWebhook('webphone_summary', $data);
-        
+
         $leadData = [
             'TITLE' => 'Brightcall Lead - ' . $data['eventType'] . ' - ' . $data['type'],
             'NAME' => 'Unknown Caller from Brightcall (' . $data['clientPhone'] . ')',
@@ -293,6 +293,41 @@ class WebhookController
     public function handleSpeedToLead(array $data): void
     {
         $this->logger->logWebhook('speed_to_lead', $data);
+
+        if (!$data['type'] || $data['type'] !== 'lead_created') {
+            return;
+        }
+
+        $leadData = [
+            'TITLE' => 'Brightcall Lead - ' . $data['widget_name'] . ' - ' . $data['type'],
+            'NAME' => $data['lead']['custom_params']['lc_param_name'],
+            'PHONE' => [
+                [
+                    'VALUE' => $data['lead']['lead_phone'],
+                    'VALUE_TYPE' => 'WORK'
+                ]
+            ],
+            'EMAIL' => [
+                [
+                    'VALUE' => $data['lead']['lead_phone']['lc_param_email'],
+                    'VALUE_TYPE' => 'WORK'
+                ]
+            ],
+            'COMMENTS' => formatComments($data),
+            'SOURCE_ID' => $data['lead']['custom_params']['api_source'] === 'Facebook' ? CONFIG['FACEBOOK_SOURCE_ID'] : CONFIG['BRIGHTCALL_SOURCE_ID'],
+            'UF_CRM_1726164235378' => $data['lead']['custom_params']['api_source'] === 'Facebook' ? CONFIG['FACEBOOK_COLLECTION_SOURCE_ID'] : CONFIG['CALL_COLLECTION_SOURCE_ID'],
+            'UF_CRM_1726453884158' => $data['lead']['time_created_iso_string'],
+            'ASSIGNED_BY_ID' => CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+        ];
+
+        $leadId = $this->bitrix->addLead($leadData);
+
+        if (!$leadId) {
+            $this->sendResponse(500, [
+                'error' => 'Failed to create lead in Bitrix'
+            ]);
+        }
+
         $this->sendResponse(200, [
             'message' => 'Speed to lead data processed successfully'
         ]);
