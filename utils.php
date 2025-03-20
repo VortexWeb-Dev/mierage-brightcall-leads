@@ -84,7 +84,7 @@ function formatLeadComments(array $data): string
 
     $output[] = "=== Client Details ===";
     $output[] = "Client Name: " . $data['lead']['custom_params']['lc_param_name'];
-    $output[] = "Client Phone: " . $data['clientPhone'];
+    $output[] = "Client Phone: " . $data['lead']['lead_phone'];
     $output[] = "Client Email: " . strtolower($data['lead']['custom_params']['lc_param_email']);
     $output[] = "";
 

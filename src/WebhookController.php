@@ -309,7 +309,7 @@ class WebhookController
             ],
             'EMAIL' => [
                 [
-                    'VALUE' => $data['lead']['lead_phone']['lc_param_email'],
+                    'VALUE' => $data['lead']['custom_params']['lc_param_email'],
                     'VALUE_TYPE' => 'WORK'
                 ]
             ],
@@ -329,7 +329,7 @@ class WebhookController
         }
 
         $this->sendResponse(200, [
-            'message' => 'Speed to lead data processed successfully'
+            'message' => 'Speed to lead data processed successfully and lead created with ID: ' . $leadId,
         ]);
     }
 

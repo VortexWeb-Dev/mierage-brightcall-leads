@@ -1,0 +1,6 @@
+[2025-03-20 19:06:54] Error: Error processing request
+Exception: Cannot access offset of type string on string
+Stack Trace:
+#0 /opt/lampp/htdocs/projects/mierage/brightcall-leads/src/WebhookController.php(56): WebhookController->handleSpeedToLead(Array)
+#1 /opt/lampp/htdocs/projects/mierage/brightcall-leads/index.php(58): WebhookController->handleRequest('speedToLead')
+#2 {main}
