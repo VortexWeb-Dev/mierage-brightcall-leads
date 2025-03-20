@@ -13,7 +13,8 @@ class WebhookController
         'callEnded' => 'handleCallEnded',
         'smsEvent' => 'handleSmsEvent',
         'webphoneSummary' => 'handleWebphoneSummary',
-        'aiTranscriptionSummary' => 'handleAiTranscriptionSummary'
+        'aiTranscriptionSummary' => 'handleAiTranscriptionSummary',
+        'speedToLead' => 'handleSpeedToLead'
     ];
 
     private LoggerController $logger;
@@ -285,6 +286,15 @@ class WebhookController
         $this->logger->logWebhook('ai_transcription', $data);
         $this->sendResponse(200, [
             'message' => 'AI transcription summary data processed successfully'
+        ]);
+    }
+
+    // Handles speedToLead webhook event
+    public function handleSpeedToLead(array $data): void
+    {
+        $this->logger->logWebhook('speed_to_lead', $data);
+        $this->sendResponse(200, [
+            'message' => 'Speed to lead data processed successfully'
         ]);
     }
 

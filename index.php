@@ -33,7 +33,8 @@ $validRoutes = [
     'callEnded',
     'smsEvent',
     'webphoneSummary',
-    'aiTranscriptionSummary'
+    'aiTranscriptionSummary',
+    'speedToLead'
 ];
 
 $route = null;
