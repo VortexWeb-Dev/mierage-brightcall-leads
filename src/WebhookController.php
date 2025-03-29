@@ -97,7 +97,7 @@ class WebhookController
             'SOURCE_ID' => CONFIG['BRIGHTCALL_SOURCE_ID'],
             'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
             'UF_CRM_1726453884158' => tsToIso($data['timestampMs']),
-            'ASSIGNED_BY_ID' => getResponsiblePersonId($data['agentEmail']) ?? CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+            'ASSIGNED_BY_ID' => $data['agentEmail'] ? getResponsiblePersonId($data['agentEmail']) : CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
         ];
 
         $leadId = $this->bitrix->addLead($leadData);
@@ -131,7 +131,7 @@ class WebhookController
             'SOURCE_ID' => CONFIG['BRIGHTCALL_SOURCE_ID'],
             'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
             'UF_CRM_1726453884158' => tsToIso($data['timestampMs']),
-            'ASSIGNED_BY_ID' => getResponsiblePersonId($data['agentEmail']) ?? CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+            'ASSIGNED_BY_ID' => $data['agentEmail'] ? getResponsiblePersonId($data['agentEmail']) : CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
         ];
 
         $leadId = $this->bitrix->addLead($leadData);
@@ -165,7 +165,7 @@ class WebhookController
             'SOURCE_ID' => CONFIG['BRIGHTCALL_SOURCE_ID'],
             'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
             'UF_CRM_1726453884158' => tsToIso($data['timestampMs']),
-            'ASSIGNED_BY_ID' => getResponsiblePersonId($data['agentEmail']) ?? CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+            'ASSIGNED_BY_ID' => $data['agentEmail'] ? getResponsiblePersonId($data['agentEmail']) : CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
         ];
 
         $leadId = $this->bitrix->addLead($leadData);
