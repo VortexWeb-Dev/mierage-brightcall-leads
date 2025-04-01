@@ -98,6 +98,7 @@ class WebhookController
             'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
             'UF_CRM_1726453884158' => tsToIso($data['timestampMs']),
             'ASSIGNED_BY_ID' => $data['agentEmail'] ? getResponsiblePersonId($data['agentEmail']) : CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+            'UF_CRM_1743492578846' => $data['callId'],
         ];
 
         $leadId = $this->bitrix->addLead($leadData);
@@ -132,6 +133,7 @@ class WebhookController
             'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
             'UF_CRM_1726453884158' => tsToIso($data['timestampMs']),
             'ASSIGNED_BY_ID' => $data['agentEmail'] ? getResponsiblePersonId($data['agentEmail']) : CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+            'UF_CRM_1743492578846' => $data['callId'],
         ];
 
         $leadId = $this->bitrix->addLead($leadData);
@@ -166,6 +168,7 @@ class WebhookController
             'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
             'UF_CRM_1726453884158' => tsToIso($data['timestampMs']),
             'ASSIGNED_BY_ID' => $data['agentEmail'] ? getResponsiblePersonId($data['agentEmail']) : CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+            'UF_CRM_1743492578846' => $data['callId'],
         ];
 
         $leadId = $this->bitrix->addLead($leadData);
@@ -200,6 +203,7 @@ class WebhookController
             'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
             'UF_CRM_1726453884158' => tsToIso($data['startTimestampMs']),
             'ASSIGNED_BY_ID' => $data['agentEmail'] ? getResponsiblePersonId($data['agentEmail']) : CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+            'UF_CRM_1743492578846' => $data['callId'],
         ];
 
         $leadId = $this->bitrix->addLead($leadData);
@@ -254,6 +258,7 @@ class WebhookController
             'UF_CRM_1726164235378' => CONFIG['CALL_COLLECTION_SOURCE_ID'],
             'UF_CRM_1726453884158' => tsToIso($data['startTimestampMs']),
             'ASSIGNED_BY_ID' => $data['agentEmail'] ? getResponsiblePersonId($data['agentEmail']) : CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+            'UF_CRM_1743492578846' => $data['callId'],
         ];
 
         $leadId = $this->bitrix->addLead($leadData);
@@ -318,6 +323,7 @@ class WebhookController
             'UF_CRM_1726164235378' => $data['lead']['custom_params']['api_source'] === 'Facebook' ? CONFIG['FACEBOOK_COLLECTION_SOURCE_ID'] : CONFIG['CALL_COLLECTION_SOURCE_ID'],
             'UF_CRM_1726453884158' => $data['lead']['time_created_iso_string'],
             'ASSIGNED_BY_ID' => CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
+            'UF_CRM_1743492578846' => $data['callId'],
         ];
 
         $leadId = $this->bitrix->addLead($leadData);
