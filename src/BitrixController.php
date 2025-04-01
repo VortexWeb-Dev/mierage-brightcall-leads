@@ -25,4 +25,26 @@ class BitrixController
         }
         exit;
     }
+
+    public function getLeadByCallId(string $callId): ?array
+    {
+        if (empty($callId)) {
+            return null;
+        }
+
+        $result = CRest::call('crm.lead.list', [
+            'filter' => [
+                'UF_CRM_1743492578846' => $callId
+            ],
+            'order' => [
+                'ID' => 'DESC'
+            ]
+        ]);
+
+        if (isset($result['result'][0])) {
+            return $result['result'][0];
+        } else {
+            return null;
+        }
+    }
 }
