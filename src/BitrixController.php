@@ -48,7 +48,7 @@ class BitrixController
         }
     }
 
-    function updateLead(array $leadData, int $leadId): ?int
+    public function updateLead(array $leadData, int $leadId): ?int
     {
         if (empty($leadData['TITLE'])) {
             header('Content-Type: application/json');

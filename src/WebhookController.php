@@ -101,7 +101,18 @@ class WebhookController
             'UF_CRM_1743492578846' => $data['callId'],
         ];
 
-        $leadId = $this->bitrix->addLead($leadData);
+        $existingLead = $this->bitrix->getLeadByCallId($data['callId']);
+
+        if ($existingLead) {
+            $leadId = $existingLead['ID'];
+            $this->bitrix->updateLead(array_merge($leadData, ['IS_RETURN_CUSTOMER' => 'Y']), $leadId);
+            $this->sendResponse(200, [
+                'message' => 'Call started data processed successfully and lead updated with ID: ' . $leadId,
+            ]);
+            return;
+        } else {
+            $leadId = $this->bitrix->addLead($leadData);
+        }
 
         if (!$leadId) {
             $this->sendResponse(500, [
@@ -136,7 +147,18 @@ class WebhookController
             'UF_CRM_1743492578846' => $data['callId'],
         ];
 
-        $leadId = $this->bitrix->addLead($leadData);
+        $existingLead = $this->bitrix->getLeadByCallId($data['callId']);
+
+        if ($existingLead) {
+            $leadId = $existingLead['ID'];
+            $this->bitrix->updateLead(array_merge($leadData, ['IS_RETURN_CUSTOMER' => 'Y']), $leadId);
+            $this->sendResponse(200, [
+                'message' => 'Call ringing data processed successfully and lead updated with ID: ' . $leadId,
+            ]);
+            return;
+        } else {
+            $leadId = $this->bitrix->addLead($leadData);
+        }
 
         if (!$leadId) {
             $this->sendResponse(500, [
@@ -171,7 +193,18 @@ class WebhookController
             'UF_CRM_1743492578846' => $data['callId'],
         ];
 
-        $leadId = $this->bitrix->addLead($leadData);
+        $existingLead = $this->bitrix->getLeadByCallId($data['callId']);
+
+        if ($existingLead) {
+            $leadId = $existingLead['ID'];
+            $this->bitrix->updateLead(array_merge($leadData, ['IS_RETURN_CUSTOMER' => 'Y']), $leadId);
+            $this->sendResponse(200, [
+                'message' => 'Call answered data processed successfully and lead updated with ID: ' . $leadId,
+            ]);
+            return;
+        } else {
+            $leadId = $this->bitrix->addLead($leadData);
+        }
 
         if (!$leadId) {
             $this->sendResponse(500, [
@@ -206,7 +239,18 @@ class WebhookController
             'UF_CRM_1743492578846' => $data['callId'],
         ];
 
-        $leadId = $this->bitrix->addLead($leadData);
+        $existingLead = $this->bitrix->getLeadByCallId($data['callId']);
+
+        if ($existingLead) {
+            $leadId = $existingLead['ID'];
+            $this->bitrix->updateLead(array_merge($leadData, ['IS_RETURN_CUSTOMER' => 'Y']), $leadId);
+            $this->sendResponse(200, [
+                'message' => 'Call ended data processed successfully and lead updated with ID: ' . $leadId,
+            ]);
+            return;
+        } else {
+            $leadId = $this->bitrix->addLead($leadData);
+        }
 
         if (!$leadId) {
             $this->sendResponse(500, [
@@ -261,7 +305,18 @@ class WebhookController
             'UF_CRM_1743492578846' => $data['callId'],
         ];
 
-        $leadId = $this->bitrix->addLead($leadData);
+        $existingLead = $this->bitrix->getLeadByCallId($data['callId']);
+
+        if ($existingLead) {
+            $leadId = $existingLead['ID'];
+            $this->bitrix->updateLead(array_merge($leadData, ['IS_RETURN_CUSTOMER' => 'Y']), $leadId);
+            $this->sendResponse(200, [
+                'message' => 'Webphone summary data processed successfully and lead updated with ID: ' . $leadId,
+            ]);
+            return;
+        } else {
+            $leadId = $this->bitrix->addLead($leadData);
+        }
 
         if (!$leadId) {
             $this->sendResponse(500, [
@@ -326,7 +381,18 @@ class WebhookController
             'UF_CRM_1743492578846' => $data['callId'],
         ];
 
-        $leadId = $this->bitrix->addLead($leadData);
+        $existingLead = $this->bitrix->getLeadByCallId($data['callId']);
+
+        if ($existingLead) {
+            $leadId = $existingLead['ID'];
+            $this->bitrix->updateLead(array_merge($leadData, ['IS_RETURN_CUSTOMER' => 'Y']), $leadId);
+            $this->sendResponse(200, [
+                'message' => 'Speed to lead data processed successfully and lead updated with ID: ' . $leadId,
+            ]);
+            return;
+        } else {
+            $leadId = $this->bitrix->addLead($leadData);
+        }
 
         if (!$leadId) {
             $this->sendResponse(500, [
