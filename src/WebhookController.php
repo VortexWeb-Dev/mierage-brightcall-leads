@@ -379,6 +379,7 @@ class WebhookController
             'UF_CRM_1726453884158' => $data['lead']['time_created_iso_string'],
             'ASSIGNED_BY_ID' => CONFIG['DEFAULT_RESPONSIBLE_PERSON_ID'],
             'UF_CRM_1743492578846' => $data['callId'],
+            'SOURCE_DESCRIPTION' => $data['widget_name'],
         ];
 
         $existingLead = $this->bitrix->getLeadByCallId($data['callId']);
